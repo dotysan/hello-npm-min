@@ -10,7 +10,8 @@
     ],
 
     "scripts": {
-        "build": "tsc  --showConfig && tsc --listEmittedFiles --diagnostics"
+        "build": "tsc --showConfig && tsc --listEmittedFiles --diagnostics",
+        "publish": "npm run build && npm publish --access public"
     },
     "devDependencies": {
         "typescript": "^5.9.3"
