@@ -27,10 +27,14 @@
     ],
     "scripts": {
         "build": "tsc --showConfig && tsc --listEmittedFiles --diagnostics",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
         "hello": "npm run build && node dist/index.js",
         "publish": "npm run build && npm publish --access public"
     },
     "devDependencies": {
+        "@vitest/coverage-v8": "^4.0.18",
         "typescript": "^5.9.3"
     }
 }
