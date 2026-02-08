@@ -52,7 +52,34 @@ If you need to publish manually from your local machine, you'll need to create a
 
 This package is automatically published to NPM when a version tag is pushed. **This is the recommended approach** because it includes cryptographic provenance attestation for supply chain security.
 
-To publish a new version:
+#### Option 1: Using the Release Script (Easiest)
+
+We've provided a script that automates the entire release process:
+
+```bash
+# For a patch release (bug fixes: 0.1.1 -> 0.1.2)
+npm run release:patch
+
+# For a minor release (new features: 0.1.1 -> 0.2.0)
+npm run release:minor
+
+# For a major release (breaking changes: 0.1.1 -> 1.0.0)
+npm run release:major
+```
+
+The script will:
+1. Check for uncommitted changes
+2. Run tests to ensure everything works
+3. Build the project
+4. Bump the version in package.json
+5. Create a git commit and tag
+6. Push changes and tags to GitHub
+
+GitHub Actions will then automatically build, test, and publish to NPM with provenance attestation.
+
+#### Option 2: Manual Commands
+
+If you prefer to run the commands manually:
 
 ```bash
 # Bump version (patch, minor, or major) - this updates package.json, commits, and creates a tag
