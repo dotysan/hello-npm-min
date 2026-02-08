@@ -1,12 +1,15 @@
 # Run `make` and this will use uv to create a Python .venv, then use
 # nodeenv to install Node.js LTS and update npm to the latest version.
-#
-# You can then run `uv run npm install` to install your Node.js
-# dependencies, and `uv run node` to run Node.js commands.
 
 PYVER := 3.14
 VB = .venv/bin
 UV_BIN := $(shell command -v uv 2>/dev/null)
+
+dist/index.js: node_modules/.bin/tsc |uv
+	@uv run npm run build
+
+node_modules/.bin/tsc: $(VB)/npm |uv
+	@uv run npm install
 
 $(VB)/npm: $(VB)/nodeenv |uv
 	@uv run nodeenv --python-virtualenv --node=lts && \
@@ -26,3 +29,7 @@ ifeq ($(UV_BIN),)
 else
 	@uv self update
 endif
+
+.PHONY: clean
+clean:
+	rm --recursive --force dist node_modules .venv
