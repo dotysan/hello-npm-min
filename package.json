@@ -1,11 +1,17 @@
 {
     "name": "hello-npm-min",
     "version": "0.0.0",
+
     "type": "module",
-    "main": "index.js",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
     "files": [
-        "index.js"
+        "dist"
     ],
+
+    "scripts": {
+        "build": "tsc  --showConfig && tsc --listEmittedFiles --diagnostics"
+    },
     "devDependencies": {
         "typescript": "^5.9.3"
     }
