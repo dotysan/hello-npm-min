@@ -3,14 +3,23 @@ Testing minimalist NPM module
 
 ## Setup
 
-### Creating an NPM Access Token
+### Creating an NPM Granular Access Token
 
-Before automated publishing can work, you need to create an NPM access token and add it to GitHub:
+Before automated publishing can work, you need to create an NPM granular access token and add it to GitHub.
+
+**Note:** Classic tokens were revoked in December 2025. You must use granular access tokens.
 
 1. **Log in to npmjs.com** and go to your account settings
-2. **Access Tokens** → **Generate New Token** → **Classic Token**
-3. Select **Automation** token type (allows publishing from CI/CD)
-4. Copy the token (you won't be able to see it again)
+2. **Access Tokens** → **Generate New Token** → **Granular Access Token**
+3. Configure the token:
+   - **Token name**: e.g., "GitHub Actions Publishing"
+   - **Expiration**: Maximum 90 days for tokens with publish permissions (you'll need to rotate regularly)
+   - **Packages and scopes**: Select the specific package(s) you want to publish
+   - **Permissions**: Select **Read and write** (required for publishing)
+   - **Organizations**: Select if publishing to an org scope
+   - **Bypass 2FA**: Enable if using in CI/CD automation (recommended for GitHub Actions)
+4. Click **Generate Token**
+5. **Copy the token immediately** (you won't be able to see it again)
 
 ### Adding the Token to GitHub
 
