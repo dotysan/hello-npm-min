@@ -50,13 +50,19 @@ If you need to publish manually from your local machine, you'll need to create a
 
 ### Automated Publishing (Recommended)
 
-This package is automatically published to NPM when a version tag is pushed. **This is the recommended approach** because it includes cryptographic provenance attestation for supply chain security.
+This package is automatically published to NPM when a version tag is pushed **from the main branch**. **This is the recommended approach** because it includes cryptographic provenance attestation for supply chain security.
+
+**Important:** Releases must be made from the `main` branch. Tags pushed from other branches will not trigger the publish workflow.
 
 #### Option 1: Using the Release Script (Easiest)
 
 We've provided a script that automates the entire release process:
 
 ```bash
+# Make sure you're on the main branch first
+git checkout main
+git pull
+
 # For a patch release (bug fixes: 0.1.1 -> 0.1.2)
 npm run release:patch
 
@@ -68,12 +74,13 @@ npm run release:major
 ```
 
 The script will:
-1. Check for uncommitted changes
-2. Run tests to ensure everything works
-3. Build the project
-4. Bump the version in package.json
-5. Create a git commit and tag
-6. Push changes and tags to GitHub
+1. Verify you're on the main branch
+2. Check for uncommitted changes
+3. Run tests to ensure everything works
+4. Build the project
+5. Bump the version in package.json
+6. Create a git commit and tag
+7. Push changes and tags to GitHub
 
 GitHub Actions will then automatically build, test, and publish to NPM with provenance attestation.
 
@@ -82,6 +89,10 @@ GitHub Actions will then automatically build, test, and publish to NPM with prov
 If you prefer to run the commands manually:
 
 ```bash
+# Make sure you're on the main branch
+git checkout main
+git pull
+
 # Bump version (patch, minor, or major) - this updates package.json, commits, and creates a tag
 npm version patch  # for bug fixes (0.1.1 -> 0.1.2)
 npm version minor  # for new features (0.1.1 -> 0.2.0)

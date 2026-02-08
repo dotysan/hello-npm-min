@@ -45,9 +45,16 @@ if ! git diff-index --quiet HEAD --; then
     exit 1
 fi
 
-# Make sure we're on the main/master branch (optional, can be removed if you want to release from any branch)
+# Ensure we're on the main branch for automated publishing
 CURRENT_BRANCH=$(git branch --show-current)
 echo -e "${YELLOW}Current branch: $CURRENT_BRANCH${NC}"
+
+if [ "$CURRENT_BRANCH" != "main" ]; then
+    echo -e "${RED}Error: Releases must be made from the 'main' branch${NC}"
+    echo -e "${RED}Current branch is '$CURRENT_BRANCH'${NC}"
+    echo -e "${YELLOW}Please checkout main branch: git checkout main${NC}"
+    exit 1
+fi
 
 # Run tests to make sure everything is working
 echo -e "${YELLOW}Running tests...${NC}"

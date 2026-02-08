@@ -12,6 +12,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # Only run if the tag is on the main branch
+    if: github.event.base_ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
