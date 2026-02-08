@@ -32,4 +32,6 @@ jobs:
         run: npm test
 
       - name: Publish to NPM with provenance
+        # Uses npm Trusted Publishing with OIDC - no token required!
+        # The id-token: write permission above enables OIDC authentication
         run: npm publish --provenance --access public

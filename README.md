@@ -20,8 +20,8 @@ This repository uses **npm Trusted Publishing** with OIDC, which is the most sec
 3. Click **Add Trusted Publisher**
 4. Select **GitHub Actions** as the provider
 5. Configure the publisher:
-   - **GitHub Organization/Username**: `dotysan` (or your username)
-   - **Repository Name**: `hello-npm-min` (or your repo name)
+   - **GitHub Organization/Username**: Your GitHub username (e.g., `dotysan`)
+   - **Repository Name**: Your repository name (e.g., `hello-npm-min`)
    - **Workflow File**: `publish.yml`
    - **Environment** (optional): Leave blank unless using GitHub environments
 6. Click **Add**
