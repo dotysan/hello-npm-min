@@ -1,6 +1,24 @@
 {
     "name": "hello-npm-min",
     "version": "0.1.0",
+    "description": "Testing minimalist NPM module",
+    "license": "MIT",
+    "author": "Curtis Doty <Curtis@GreenKey.net> (https://github.com/dotysan)",
+    "homepage": "https://github.com/dotysan/hello-npm-min#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/dotysan/hello-npm-min.git"
+    },
+    "bugs": {
+        "url": "https://github.com/dotysan/hello-npm-min/issues"
+    },
+    "keywords": [
+        "hello",
+        "minimalist",
+        "module",
+        "npm",
+        "world"
+    ],
     "type": "module",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -9,6 +27,7 @@
     ],
     "scripts": {
         "build": "tsc --showConfig && tsc --listEmittedFiles --diagnostics",
+        "hello": "npm run build && node dist/index.js",
         "publish": "npm run build && npm publish --access public"
     },
     "devDependencies": {
