@@ -31,7 +31,11 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "hello": "npm run build && node dist/index.js",
-        "publish": "npm run build && npm publish --access public"
+        "publish": "npm run build && npm publish --access public",
+        "release": "bash scripts/release.sh",
+        "release:patch": "bash scripts/release.sh patch",
+        "release:minor": "bash scripts/release.sh minor",
+        "release:major": "bash scripts/release.sh major"
     },
     "devDependencies": {
         "@vitest/coverage-v8": "^4.0.18",
