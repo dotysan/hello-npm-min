@@ -23,7 +23,11 @@ Before automated publishing can work, you need to create an NPM access token and
 
 ## Publishing
 
-This package is automatically published to NPM when a version tag is pushed. To publish a new version:
+### Automated Publishing (Recommended)
+
+This package is automatically published to NPM when a version tag is pushed. **This is the recommended approach** because it includes cryptographic provenance attestation for supply chain security.
+
+To publish a new version:
 
 ```bash
 # Bump version (patch, minor, or major) - this updates package.json, commits, and creates a tag
@@ -37,4 +41,16 @@ git push --follow-tags
 
 GitHub Actions will automatically build, test, and publish to NPM with provenance attestation.
 
-The automated publishing uses modern npm provenance features to ensure package authenticity and supply chain security.
+### Manual Publishing
+
+If you need to publish manually (not recommended - provenance won't be included):
+
+```bash
+npm run publish
+```
+
+**Note:** Manual publishing does not include provenance attestation because the `--provenance` flag only works in CI environments like GitHub Actions with OIDC support.
+
+### About Provenance
+
+The automated publishing workflow uses modern npm provenance features to ensure package authenticity and supply chain security. Provenance creates a cryptographic link between the published package and the source code repository, allowing users to verify the package's origin.
