@@ -1,0 +1,49 @@
+name: Publish to NPM
+on:
+
+  # only when new tag is pushed
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  # give workflow's GITHUB_TOKEN access to repo
+  contents: read
+  # and for OIDC authentication
+  id-token: write
+
+jobs:
+  publish:
+    name: Build & test, then publish to NPM registry
+    runs-on: ubuntu-latest
+    timeout-minutes: 15 # default is 6 hours
+
+    steps:
+      - name: Checkout GitHub repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 'lts/*'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+# must first go here: https://www.npmjs.com/package/hello-npm-min/access
+#  - org/user: dotysan
+#  - repo: hello-npm-min
+#  - filename: publish.yaml
+#  - environment: ?
+#  - also disallow all tokens
+      - name: Publish to NPM with provenance
+        # Uses npm Trusted Publishing with OIDC - no token required!
+        # The id-token: write permission above enables OIDC authentication
+        run: npm publish --provenance --access public
