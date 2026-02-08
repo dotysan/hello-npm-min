@@ -3,32 +3,48 @@ Testing minimalist NPM module
 
 ## Setup
 
-### Creating an NPM Granular Access Token
+### Configuring Trusted Publishing (Recommended)
 
-Before automated publishing can work, you need to create an NPM granular access token and add it to GitHub.
+This repository uses **npm Trusted Publishing** with OIDC, which is the most secure way to publish packages from CI/CD. No npm tokens are needed!
 
-**Note:** Classic tokens were revoked in December 2025. You must use granular access tokens.
+**What is Trusted Publishing?**
+- Uses OpenID Connect (OIDC) for authentication instead of long-lived tokens
+- No secrets to manage or rotate
+- Automatically includes provenance attestation
+- Greatly reduces security risks
+
+**Setup Steps:**
+
+1. **On npmjs.com**, go to your package settings
+2. Navigate to **Publishing** → **Trusted Publishers**
+3. Click **Add Trusted Publisher**
+4. Select **GitHub Actions** as the provider
+5. Configure the publisher:
+   - **GitHub Organization/Username**: `dotysan` (or your username)
+   - **Repository Name**: `hello-npm-min` (or your repo name)
+   - **Workflow File**: `publish.yml`
+   - **Environment** (optional): Leave blank unless using GitHub environments
+6. Click **Add**
+
+That's it! No tokens to create or store. The GitHub Actions workflow will authenticate automatically using OIDC.
+
+### Manual Publishing (Optional)
+
+If you need to publish manually from your local machine, you'll need to create a granular access token:
 
 1. **Log in to npmjs.com** and go to your account settings
 2. **Access Tokens** → **Generate New Token** → **Granular Access Token**
 3. Configure the token:
-   - **Token name**: e.g., "GitHub Actions Publishing"
-   - **Expiration**: Maximum 90 days for tokens with publish permissions (you'll need to rotate regularly)
+   - **Token name**: e.g., "Local Development Publishing"
+   - **Expiration**: Maximum 90 days for tokens with publish permissions
    - **Packages and scopes**: Select the specific package(s) you want to publish
    - **Permissions**: Select **Read and write** (required for publishing)
    - **Organizations**: Select if publishing to an org scope
-   - **Bypass 2FA**: Enable if using in CI/CD automation (recommended for GitHub Actions)
+   - **2FA**: Do NOT enable bypass 2FA (use Trusted Publishing for CI/CD instead)
 4. Click **Generate Token**
-5. **Copy the token immediately** (you won't be able to see it again)
+5. **Copy the token immediately** and use it with `npm login` or store in `.npmrc`
 
-### Adding the Token to GitHub
-
-1. Go to your repository on GitHub
-2. Navigate to **Settings** → **Secrets and variables** → **Actions**
-3. Click **New repository secret**
-4. Name: `NODE_AUTH_TOKEN`
-5. Value: Paste your NPM token
-6. Click **Add secret**
+**Note:** Manual publishing does not include provenance attestation. Use the automated workflow for supply chain security.
 
 ## Publishing
 
