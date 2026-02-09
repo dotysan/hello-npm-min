@@ -56,13 +56,34 @@ This package is automatically published to NPM when a version tag is pushed **fr
 
 #### Option 1: Using the Release Script (Easiest)
 
-We've provided a script that automates the entire release process:
+We've provided a script that automates the entire release process.
+
+**Automatic Version Detection (Recommended):**
+
+The script can intelligently determine the version bump type based on your commit messages:
 
 ```bash
 # Make sure you're on the main branch first
 git checkout main
 git pull
 
+# Auto-detect version bump from commit messages
+npm run release
+# or explicitly:
+npm run release:auto
+```
+
+The script uses [Conventional Commits](https://www.conventionalcommits.org/) to determine the version:
+- Commits with `fix:` → patch version (0.1.1 → 0.1.2)
+- Commits with `feat:` → minor version (0.1.1 → 0.2.0)  
+- Commits with `BREAKING CHANGE:` or `!:` → major version (0.1.1 → 1.0.0)
+- No conventional commits → patch version (default)
+
+**Manual Version Selection:**
+
+You can also explicitly specify the version bump type:
+
+```bash
 # For a patch release (bug fixes: 0.1.1 -> 0.1.2)
 npm run release:patch
 
@@ -74,10 +95,11 @@ npm run release:major
 ```
 
 The script will:
-1. Verify you're on the main branch
-2. Check for uncommitted changes
-3. Run tests to ensure everything works
-4. Build the project
+1. Analyze commits or use specified version type
+2. Verify you're on the main branch
+3. Check for uncommitted changes
+4. Run tests to ensure everything works
+5. Build the project
 5. Bump the version in package.json
 6. Create a git commit and tag
 7. Push changes and tags to GitHub

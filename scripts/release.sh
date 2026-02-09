@@ -5,37 +5,104 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Usage function
 usage() {
-    echo "Usage: $0 [patch|minor|major]"
+    echo "Usage: $0 [patch|minor|major|auto]"
     echo ""
     echo "Arguments:"
     echo "  patch  - Bump patch version (0.1.1 -> 0.1.2) for bug fixes"
     echo "  minor  - Bump minor version (0.1.1 -> 0.2.0) for new features"
     echo "  major  - Bump major version (0.1.1 -> 1.0.0) for breaking changes"
+    echo "  auto   - Automatically detect version bump from commit messages (default)"
     echo ""
-    echo "Example:"
-    echo "  $0 patch"
+    echo "Auto-detection uses conventional commits:"
+    echo "  - 'fix:' commits → patch"
+    echo "  - 'feat:' commits → minor"
+    echo "  - 'BREAKING CHANGE:' or '!' after type → major"
+    echo ""
+    echo "Examples:"
+    echo "  $0           # Auto-detect from commits"
+    echo "  $0 auto      # Auto-detect from commits"
+    echo "  $0 patch     # Force patch version"
     exit 1
 }
 
-# Check if argument is provided
-if [ $# -eq 0 ]; then
-    echo -e "${RED}Error: Version type not specified${NC}"
-    usage
+# Function to detect version type from commits
+detect_version_type() {
+    echo -e "${BLUE}Analyzing commits to determine version bump...${NC}"
+    
+    # Get the last version tag
+    LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+    
+    if [ -z "$LAST_TAG" ]; then
+        echo -e "${YELLOW}No previous tags found. Defaulting to patch release.${NC}"
+        echo "patch"
+        return
+    fi
+    
+    echo -e "${YELLOW}Last version tag: $LAST_TAG${NC}"
+    
+    # Get commits since last tag
+    COMMITS=$(git log $LAST_TAG..HEAD --pretty=format:"%s")
+    
+    if [ -z "$COMMITS" ]; then
+        echo -e "${YELLOW}No commits since last tag. Defaulting to patch release.${NC}"
+        echo "patch"
+        return
+    fi
+    
+    echo -e "${YELLOW}Commits since $LAST_TAG:${NC}"
+    echo "$COMMITS" | while IFS= read -r commit; do
+        echo "  - $commit"
+    done
+    echo ""
+    
+    # Check for breaking changes (major version)
+    if echo "$COMMITS" | grep -qiE "^[a-z]+(\(.+\))?!:|BREAKING CHANGE:"; then
+        echo -e "${GREEN}Found breaking changes → major version bump${NC}"
+        echo "major"
+        return
+    fi
+    
+    # Check for new features (minor version)
+    if echo "$COMMITS" | grep -qiE "^feat(\(.+\))?:"; then
+        echo -e "${GREEN}Found new features → minor version bump${NC}"
+        echo "minor"
+        return
+    fi
+    
+    # Check for fixes (patch version)
+    if echo "$COMMITS" | grep -qiE "^fix(\(.+\))?:"; then
+        echo -e "${GREEN}Found bug fixes → patch version bump${NC}"
+        echo "patch"
+        return
+    fi
+    
+    # Default to patch if no conventional commits found
+    echo -e "${YELLOW}No conventional commit prefixes found. Defaulting to patch release.${NC}"
+    echo "patch"
+}
+
+# Determine version type
+if [ $# -eq 0 ] || [ "$1" = "auto" ]; then
+    VERSION_TYPE=$(detect_version_type)
+else
+    VERSION_TYPE=$1
+    
+    # Validate version type
+    if [[ ! "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
+        echo -e "${RED}Error: Invalid version type '$VERSION_TYPE'${NC}"
+        usage
+    fi
+    
+    echo -e "${BLUE}Using manually specified version type: $VERSION_TYPE${NC}"
 fi
 
-VERSION_TYPE=$1
-
-# Validate version type
-if [[ ! "$VERSION_TYPE" =~ ^(patch|minor|major)$ ]]; then
-    echo -e "${RED}Error: Invalid version type '$VERSION_TYPE'${NC}"
-    usage
-fi
-
-echo -e "${GREEN}Starting release process...${NC}"
+echo ""
+echo -e "${GREEN}Starting release process with $VERSION_TYPE version bump...${NC}"
 echo ""
 
 # Check for uncommitted changes
