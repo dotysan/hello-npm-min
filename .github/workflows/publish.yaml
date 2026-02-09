@@ -16,7 +16,7 @@ jobs:
   publish:
     name: Build & test, then publish to NPM registry
     runs-on: ubuntu-latest
-    timeout-minutes: 15 # default is 6 hours
+    timeout-minutes: 5 # default is 6 hours
 
     steps:
       - name: Checkout GitHub repository
@@ -29,7 +29,10 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Update npm to latest
-        run: npm install --global npm
+        run: |
+          npm config set fund false # disabl annoyance
+          npm install --global npm
+          npm --version
 
       - name: Install dependencies
         run: npm ci
