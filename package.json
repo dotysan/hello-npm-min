@@ -31,7 +31,7 @@
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "hello": "npm run build && node dist/index.js",
-        "publish": "npm run build && npm publish --access public"
+        "prepublishOnly": "npm run build"
     },
     "devDependencies": {
         "@vitest/coverage-v8": "^4.0.18",
