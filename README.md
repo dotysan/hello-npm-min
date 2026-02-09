@@ -76,7 +76,7 @@ npm run release:auto
 The script uses [Conventional Commits](https://www.conventionalcommits.org/) to determine the version:
 - Commits with `fix:` → patch version (0.1.1 → 0.1.2)
 - Commits with `feat:` → minor version (0.1.1 → 0.2.0)  
-- Commits with `BREAKING CHANGE:` or `!:` → major version (0.1.1 → 1.0.0)
+- Commits with `feat!:` or `BREAKING CHANGE:` → major version (0.1.1 → 1.0.0)
 - No conventional commits → patch version (default)
 
 **Manual Version Selection:**
@@ -100,9 +100,9 @@ The script will:
 3. Check for uncommitted changes
 4. Run tests to ensure everything works
 5. Build the project
-5. Bump the version in package.json
-6. Create a git commit and tag
-7. Push changes and tags to GitHub
+6. Bump the version in package.json
+7. Create a git commit and tag
+8. Push changes and tags to GitHub
 
 GitHub Actions will then automatically build, test, and publish to NPM with provenance attestation.
 

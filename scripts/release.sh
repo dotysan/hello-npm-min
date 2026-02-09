@@ -61,7 +61,7 @@ detect_version_type() {
     echo ""
     
     # Check for breaking changes (major version)
-    if echo "$COMMITS" | grep -qiE "^[a-z]+(\(.+\))?!:|BREAKING CHANGE:"; then
+    if echo "$COMMITS" | grep -qiE "^[a-z]+(\([^)]+\))?!:|BREAKING CHANGE:"; then
         echo -e "${GREEN}Found breaking changes → major version bump${NC}"
         echo "major"
         return
