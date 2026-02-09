@@ -7,8 +7,10 @@ on:
       - 'v*.*.*'
 
 permissions:
+
   # give workflow's GITHUB_TOKEN access to repo
   contents: read
+
   # and for OIDC authentication
   id-token: write
 
@@ -36,9 +38,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      # - name: Build
-      #   run: npm run build
 
       - name: Run tests
         run: npm test
