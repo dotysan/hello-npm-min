@@ -30,6 +30,14 @@ else
 	@uv self update
 endif
 
+.PHONY: bump
+bump: $(VB)/npm |uv
+	@uv run npm run bump
+
+.PHONY: push
+push: $(VB)/npm |uv
+	@uv run npm run push
+
 .PHONY: clean
 clean:
 	rm --recursive --force dist node_modules .venv
