@@ -1,6 +1,6 @@
 {
     "name": "hello-npm-min",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "description": "Testing minimalist NPM module",
     "license": "MIT",
     "author": "Curtis Doty <Curtis@GreenKey.net> (https://github.com/dotysan)",
